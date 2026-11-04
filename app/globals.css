@@ -1,0 +1,137 @@
+@import "tailwindcss";
+@import "./animations.css";
+
+/* ─────────────────────────────────────────────────────────────
+   TOKENS DE DESIGN (FRONTEND.md §6.2)
+   Une valeur = un nom. Les composants utilisent le nom (bg-paper,
+   text-ink…), jamais la couleur brute : changer de thème revient à
+   changer les valeurs ici, rien d'autre.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --paper: #ffffff; /* fond des sections de rang impair */
+  --band: #f3f3f4; /* fond des sections de rang pair, puces */
+  --surface: #ffffff; /* cartes posées sur --band */
+  --ink: #1a1c1c; /* texte principal */
+  --ink-muted: #4e5353; /* texte secondaire */
+  --line: #e2e2e2; /* filets décoratifs (pas pour les champs) */
+  --field-border: #767b7b; /* bordure des champs (contraste ≥ 3:1) */
+  --blue: #0047ff; /* liens, focus, trait actif */
+  --blue-button: #0047ff; /* fond des boutons primaires */
+  --blue-strong: #0035c5; /* calque de survol des boutons */
+  --panel: #2f3131; /* panneau sombre */
+  --on-panel-muted: #c4c8c8; /* texte secondaire sur panneau */
+  --blue-on-dark: #8fa8ff; /* liens sur panneau */
+  color-scheme: light;
+}
+
+/* Thème sombre choisi par le script du layout… */
+:root[data-theme="dark"] {
+  --paper: #121414;
+  --band: #181b1b;
+  --surface: #1f2222;
+  --ink: #f3f3f4;
+  --ink-muted: #a9aeae;
+  --line: #343838;
+  --field-border: #6f7575;
+  --blue: #86a2ff;
+  --blue-button: #1a55ff;
+  --panel: #262929;
+  color-scheme: dark;
+}
+
+/* …ou, si JavaScript est absent, préférence du système. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --paper: #121414;
+    --band: #181b1b;
+    --surface: #1f2222;
+    --ink: #f3f3f4;
+    --ink-muted: #a9aeae;
+    --line: #343838;
+    --field-border: #6f7575;
+    --blue: #86a2ff;
+    --blue-button: #1a55ff;
+    --panel: #262929;
+    color-scheme: dark;
+  }
+}
+
+/* Rend les tokens utilisables comme classes Tailwind (bg-paper, text-ink…).
+   "inline" : la valeur reste une variable, donc elle suit le thème. */
+@theme inline {
+  --color-paper: var(--paper);
+  --color-band: var(--band);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-field-border: var(--field-border);
+  --color-blue: var(--blue);
+  --color-blue-button: var(--blue-button);
+  --color-blue-strong: var(--blue-strong);
+  --color-panel: var(--panel);
+  --color-on-panel-muted: var(--on-panel-muted);
+  --color-blue-on-dark: var(--blue-on-dark);
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Styles de titres réutilisables : tailles fluides + largeur de police réduite. */
+@utility text-display {
+  font-size: clamp(2.75rem, 1.6rem + 5.2vw, 6rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  font-stretch: 88%;
+}
+@utility text-h2 {
+  font-size: clamp(2rem, 1.4rem + 2.4vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-stretch: 90%;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem; /* la navbar fixe ne masque jamais une ancre */
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Focus visible partout, au clavier uniquement. */
+  :focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* Couleurs d'état (FRONTEND.md §6.2) : toujours accompagnées d'une icône et d'un texte. */
+:root {
+  --error: #b42318;
+  --success: #0f7b45;
+}
+:root[data-theme="dark"] {
+  --error: #ff8a80;
+  --success: #5fd39a;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --error: #ff8a80;
+    --success: #5fd39a;
+  }
+}
+@theme inline {
+  --color-error: var(--error);
+  --color-success: var(--success);
+}
